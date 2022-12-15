@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Matchish\ScoutElasticSearch\Searchable;
+namespace Alltvex\ScoutOpenSearch\Searchable;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -25,18 +25,22 @@ final class SearchableListFactory
      * @var array|null
      */
     private static ?array $searchableClasses = null;
+
     /**
      * @var string
      */
     private string $namespace;
+
     /**
      * @var string
      */
     private string $appPath;
+
     /**
      * @var array
      */
     private array $errors = [];
+
     /**
      * @var Reflector|null
      */

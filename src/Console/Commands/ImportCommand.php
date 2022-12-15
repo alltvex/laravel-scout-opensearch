@@ -2,29 +2,30 @@
 
 declare(strict_types=1);
 
-namespace Matchish\ScoutElasticSearch\Console\Commands;
+namespace Alltvex\ScoutOpenSearch\Console\Commands;
 
+use Alltvex\ScoutOpenSearch\Jobs\Import;
+use Alltvex\ScoutOpenSearch\Jobs\QueueableJob;
+use Alltvex\ScoutOpenSearch\Searchable\ImportSource;
+use Alltvex\ScoutOpenSearch\Searchable\ImportSourceFactory;
+use Alltvex\ScoutOpenSearch\Searchable\SearchableListFactory;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
-use Matchish\ScoutElasticSearch\Jobs\Import;
-use Matchish\ScoutElasticSearch\Jobs\QueueableJob;
-use Matchish\ScoutElasticSearch\Searchable\ImportSource;
-use Matchish\ScoutElasticSearch\Searchable\ImportSourceFactory;
-use Matchish\ScoutElasticSearch\Searchable\SearchableListFactory;
 
 final class ImportCommand extends Command
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected $signature = 'scout:import {searchable?* : The name of the searchable}';
+
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected $description = 'Create new index and import all searchable into the one';
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function handle(): void
     {

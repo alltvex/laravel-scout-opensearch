@@ -1,10 +1,10 @@
 <?php
 
-namespace Matchish\ScoutElasticSearch\Jobs\Stages;
+namespace Alltvex\ScoutOpenSearch\Jobs\Stages;
 
-use Elastic\Elasticsearch\Client;
-use Matchish\ScoutElasticSearch\ElasticSearch\Index;
-use Matchish\ScoutElasticSearch\ElasticSearch\Params\Indices\Refresh;
+use Alltvex\ScoutOpenSearch\OpenSearch\Index;
+use Alltvex\ScoutOpenSearch\OpenSearch\Params\Indices\Refresh;
+use OpenSearch\Client;
 
 /**
  * @internal
@@ -26,10 +26,10 @@ final class RefreshIndex
         $this->index = $index;
     }
 
-    public function handle(Client $elasticsearch): void
+    public function handle(Client $opensearch): void
     {
         $params = new Refresh($this->index->name());
-        $elasticsearch->indices()->refresh($params->toArray());
+        $opensearch->indices()->refresh($params->toArray());
     }
 
     public function estimate(): int

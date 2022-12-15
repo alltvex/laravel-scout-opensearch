@@ -1,6 +1,6 @@
 <?php
 
-namespace Matchish\ScoutElasticSearch\ElasticSearch;
+namespace Alltvex\ScoutOpenSearch\OpenSearch;
 
 interface Alias
 {

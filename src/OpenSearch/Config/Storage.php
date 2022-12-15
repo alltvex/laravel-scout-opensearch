@@ -1,6 +1,6 @@
 <?php
 
-namespace Matchish\ScoutElasticSearch\ElasticSearch\Config;
+namespace Alltvex\ScoutOpenSearch\OpenSearch\Config;
 
 class Storage
 {
@@ -18,7 +18,7 @@ class Storage
      * @param  string  $config
      * @return Storage
      */
-    public static function load(string $config): Storage
+    public static function load(string $config): self
     {
         return new self($config);
     }
@@ -50,7 +50,7 @@ class Storage
     /**
      * @return ?string
      */
-    public function elasticCloudId(): ?string
+    public function openCloudId(): ?string
     {
         return $this->loadConfig('cloud_id');
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Matchish\ScoutElasticSearch;
+namespace Alltvex\ScoutOpenSearch;
 
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Builder;
@@ -17,8 +17,7 @@ final class MixedSearch
      */
     public static function search(string $query = '', $callback = null): Builder
     {
-        return new Builder(new class extends Model
-        {
+        return new Builder(new class extends Model {
             use Searchable;
         }, $query, $callback);
     }

@@ -1,50 +1,50 @@
 <?php
 
-namespace Matchish\ScoutElasticSearch\Engines;
+namespace Alltvex\ScoutOpenSearch\Engines;
 
-use Elastic\Elasticsearch\Exception\ServerResponseException;
+use Alltvex\ScoutOpenSearch\OpenSearch\HitsIteratorAggregate;
+use Alltvex\ScoutOpenSearch\OpenSearch\Params\Bulk;
+use Alltvex\ScoutOpenSearch\OpenSearch\Params\Indices\Refresh;
+use Alltvex\ScoutOpenSearch\OpenSearch\Params\Search as SearchParams;
+use Alltvex\ScoutOpenSearch\OpenSearch\SearchFactory;
+use Alltvex\ScoutOpenSearch\OpenSearch\SearchResults;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\LazyCollection;
 use Laravel\Scout\Builder;
 use Laravel\Scout\Builder as BaseBuilder;
 use Laravel\Scout\Engines\Engine;
-use Matchish\ScoutElasticSearch\ElasticSearch\HitsIteratorAggregate;
-use Matchish\ScoutElasticSearch\ElasticSearch\Params\Bulk;
-use Matchish\ScoutElasticSearch\ElasticSearch\Params\Indices\Refresh;
-use Matchish\ScoutElasticSearch\ElasticSearch\Params\Search as SearchParams;
-use Matchish\ScoutElasticSearch\ElasticSearch\SearchFactory;
-use Matchish\ScoutElasticSearch\ElasticSearch\SearchResults;
-use ONGR\ElasticsearchDSL\Query\MatchAllQuery;
-use ONGR\ElasticsearchDSL\Search;
+use OpenSearch\Exception\ServerResponseException;
+use OpenSearchDSL\Query\MatchAllQuery;
+use OpenSearchDSL\Search;
 
-final class ElasticSearchEngine extends Engine
+final class OpenSearchEngine extends Engine
 {
     /**
-     * The ElasticSearch client.
+     * The OpenSearch client.
      *
-     * @var \Elastic\Elasticsearch\Client
+     * @var \OpenSearch\Client
      */
-    protected $elasticsearch;
+    protected $opensearch;
 
     /**
      * Create a new engine instance.
      *
-     * @param  \Elastic\Elasticsearch\Client  $elasticsearch
+     * @param  \OpenSearch\Client  $opensearch
      * @return void
      */
-    public function __construct(\Elastic\Elasticsearch\Client $elasticsearch)
+    public function __construct(\OpenSearch\Client $opensearch)
     {
-        $this->elasticsearch = $elasticsearch;
+        $this->opensearch = $opensearch;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function update($models)
     {
         $params = new Bulk();
         $params->index($models);
-        $response = $this->elasticsearch->bulk($params->toArray())->asArray();
+        $response = $this->opensearch->bulk($params->toArray());
         if (array_key_exists('errors', $response) && $response['errors']) {
             $error = new ServerResponseException(json_encode($response, JSON_PRETTY_PRINT));
             throw new \Exception('Bulk update error', $error->getCode(), $error);
@@ -52,32 +52,32 @@ final class ElasticSearchEngine extends Engine
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function delete($models)
     {
         $params = new Bulk();
         $params->delete($models);
-        $this->elasticsearch->bulk($params->toArray());
+        $this->opensearch->bulk($params->toArray());
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function flush($model)
     {
         $indexName = $model->searchableAs();
-        $exist = $this->elasticsearch->indices()->exists(['index' => $indexName])->asBool();
+        $exist = $this->opensearch->indices()->exists(['index' => $indexName])->asBool();
         if ($exist) {
             $body = (new Search())->addQuery(new MatchAllQuery())->toArray();
             $params = new SearchParams($indexName, $body);
-            $this->elasticsearch->deleteByQuery($params->toArray());
-            $this->elasticsearch->indices()->refresh((new Refresh($indexName))->toArray());
+            $this->opensearch->deleteByQuery($params->toArray());
+            $this->opensearch->indices()->refresh((new Refresh($indexName))->toArray());
         }
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function search(BaseBuilder $builder)
     {
@@ -85,7 +85,7 @@ final class ElasticSearchEngine extends Engine
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function paginate(BaseBuilder $builder, $perPage, $page)
     {
@@ -96,7 +96,7 @@ final class ElasticSearchEngine extends Engine
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function mapIds($results)
     {
@@ -104,7 +104,7 @@ final class ElasticSearchEngine extends Engine
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function map(BaseBuilder $builder, $results, $model)
     {
@@ -173,7 +173,7 @@ final class ElasticSearchEngine extends Engine
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getTotalCount($results)
     {
@@ -194,7 +194,7 @@ final class ElasticSearchEngine extends Engine
 
             return call_user_func(
                 $callback,
-                $this->elasticsearch,
+                $this->opensearch,
                 $searchBody
             );
         }
@@ -203,6 +203,6 @@ final class ElasticSearchEngine extends Engine
         $indexName = $builder->index ?: $model->searchableAs();
         $params = new SearchParams($indexName, $searchBody->toArray());
 
-        return $this->elasticsearch->search($params->toArray())->asArray();
+        return $this->opensearch->search($params->toArray())->asArray();
     }
 }

@@ -1,9 +1,9 @@
 <?php
 
-namespace Matchish\ScoutElasticSearch\Jobs\Stages;
+namespace Alltvex\ScoutOpenSearch\Jobs\Stages;
 
+use Alltvex\ScoutOpenSearch\Searchable\ImportSource;
 use Illuminate\Support\Collection;
-use Matchish\ScoutElasticSearch\Searchable\ImportSource;
 
 /**
  * @internal

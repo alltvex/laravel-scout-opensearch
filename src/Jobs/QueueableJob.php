@@ -1,10 +1,10 @@
 <?php
 
-namespace Matchish\ScoutElasticSearch\Jobs;
+namespace Alltvex\ScoutOpenSearch\Jobs;
 
+use Alltvex\ScoutOpenSearch\ProgressReportable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Matchish\ScoutElasticSearch\ProgressReportable;
 
 class QueueableJob implements ShouldQueue
 {

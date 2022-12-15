@@ -1,11 +1,11 @@
 <?php
 
-namespace Matchish\ScoutElasticSearch\Searchable;
+namespace Alltvex\ScoutOpenSearch\Searchable;
 
+use Alltvex\ScoutOpenSearch\Database\Scopes\PageScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Collection;
-use Matchish\ScoutElasticSearch\Database\Scopes\PageScope;
 
 final class DefaultImportSource implements ImportSource
 {
@@ -15,6 +15,7 @@ final class DefaultImportSource implements ImportSource
      * @var string
      */
     private $className;
+
     /**
      * @var array
      */

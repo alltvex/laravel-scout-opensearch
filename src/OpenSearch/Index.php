@@ -1,8 +1,8 @@
 <?php
 
-namespace Matchish\ScoutElasticSearch\ElasticSearch;
+namespace Alltvex\ScoutOpenSearch\OpenSearch;
 
-use Matchish\ScoutElasticSearch\Searchable\ImportSource;
+use Alltvex\ScoutOpenSearch\Searchable\ImportSource;
 
 /**
  * @internal
@@ -18,10 +18,12 @@ final class Index
      * @var string
      */
     private $name;
+
     /**
      * @var array|null
      */
     private $settings;
+
     /**
      * @var array|null
      */
@@ -84,18 +86,18 @@ final class Index
         return $config;
     }
 
-    public static function fromSource(ImportSource $source): Index
+    public static function fromSource(ImportSource $source): self
     {
         $name = $source->searchableAs().'_'.time();
-        $settingsConfigKey = "elasticsearch.indices.settings.{$source->searchableAs()}";
-        $mappingsConfigKey = "elasticsearch.indices.mappings.{$source->searchableAs()}";
+        $settingsConfigKey = "opensearch.indices.settings.{$source->searchableAs()}";
+        $mappingsConfigKey = "opensearch.indices.mappings.{$source->searchableAs()}";
         $defaultSettings = [
             'number_of_shards' => 1,
             'number_of_replicas' => 0,
 
         ];
-        $settings = config($settingsConfigKey, config('elasticsearch.indices.settings.default', $defaultSettings));
-        $mappings = config($mappingsConfigKey, config('elasticsearch.indices.mappings.default'));
+        $settings = config($settingsConfigKey, config('opensearch.indices.settings.default', $defaultSettings));
+        $mappings = config($mappingsConfigKey, config('opensearch.indices.mappings.default'));
 
         return new static($name, $settings, $mappings);
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Matchish\ScoutElasticSearch\Searchable;
+namespace Alltvex\ScoutOpenSearch\Searchable;
 
 final class DefaultImportSourceFactory implements ImportSourceFactory
 {

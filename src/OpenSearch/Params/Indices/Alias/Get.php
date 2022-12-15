@@ -1,6 +1,6 @@
 <?php
 
-namespace Matchish\ScoutElasticSearch\ElasticSearch\Params\Indices\Alias;
+namespace Alltvex\ScoutOpenSearch\OpenSearch\Params\Indices\Alias;
 
 /**
  * @internal
@@ -11,6 +11,7 @@ final class Get
      * @var string
      */
     private $alias;
+
     /**
      * @var string
      */
@@ -39,7 +40,7 @@ final class Get
         ];
     }
 
-    public static function anyIndex(string $alias): Get
+    public static function anyIndex(string $alias): self
     {
         return new static($alias, '*');
     }

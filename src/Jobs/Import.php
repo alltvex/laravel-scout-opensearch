@@ -1,12 +1,12 @@
 <?php
 
-namespace Matchish\ScoutElasticSearch\Jobs;
+namespace Alltvex\ScoutOpenSearch\Jobs;
 
-use Elastic\Elasticsearch\Client;
+use Alltvex\ScoutOpenSearch\ProgressReportable;
+use Alltvex\ScoutOpenSearch\Searchable\ImportSource;
 use Illuminate\Bus\Queueable;
 use Illuminate\Support\Collection;
-use Matchish\ScoutElasticSearch\ProgressReportable;
-use Matchish\ScoutElasticSearch\Searchable\ImportSource;
+use OpenSearch\Client;
 
 /**
  * @internal
@@ -30,16 +30,16 @@ final class Import
     }
 
     /**
-     * @param  Client  $elasticsearch
+     * @param  Client  $opensearch
      */
-    public function handle(Client $elasticsearch): void
+    public function handle(Client $opensearch): void
     {
         $stages = $this->stages();
         $estimate = $stages->sum->estimate();
         $this->progressBar()->setMaxSteps($estimate);
-        $stages->each(function ($stage) use ($elasticsearch) {
+        $stages->each(function ($stage) use ($opensearch) {
             $this->progressBar()->setMessage($stage->title());
-            $stage->handle($elasticsearch);
+            $stage->handle($opensearch);
             $this->progressBar()->advance($stage->estimate());
         });
     }

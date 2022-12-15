@@ -1,13 +1,13 @@
 <?php
 
-namespace Matchish\ScoutElasticSearch\Jobs\Stages;
+namespace Alltvex\ScoutOpenSearch\Jobs\Stages;
 
-use Elastic\Elasticsearch\Client;
-use Matchish\ScoutElasticSearch\ElasticSearch\DefaultAlias;
-use Matchish\ScoutElasticSearch\ElasticSearch\Index;
-use Matchish\ScoutElasticSearch\ElasticSearch\Params\Indices\Create;
-use Matchish\ScoutElasticSearch\ElasticSearch\WriteAlias;
-use Matchish\ScoutElasticSearch\Searchable\ImportSource;
+use Alltvex\ScoutOpenSearch\OpenSearch\DefaultAlias;
+use Alltvex\ScoutOpenSearch\OpenSearch\Index;
+use Alltvex\ScoutOpenSearch\OpenSearch\Params\Indices\Create;
+use Alltvex\ScoutOpenSearch\OpenSearch\WriteAlias;
+use Alltvex\ScoutOpenSearch\Searchable\ImportSource;
+use OpenSearch\Client;
 
 /**
  * @internal
@@ -18,6 +18,7 @@ final class CreateWriteIndex
      * @var ImportSource
      */
     private $source;
+
     /**
      * @var Index
      */
@@ -33,7 +34,7 @@ final class CreateWriteIndex
         $this->index = $index;
     }
 
-    public function handle(Client $elasticsearch): void
+    public function handle(Client $opensearch): void
     {
         $source = $this->source;
         $this->index->addAlias(new WriteAlias(new DefaultAlias($source->searchableAs())));
@@ -43,7 +44,7 @@ final class CreateWriteIndex
             $this->index->config()
         );
 
-        $elasticsearch->indices()->create($params->toArray());
+        $opensearch->indices()->create($params->toArray());
     }
 
     public function title(): string

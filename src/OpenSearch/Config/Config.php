@@ -1,12 +1,12 @@
 <?php
 
-namespace Matchish\ScoutElasticSearch\ElasticSearch\Config;
+namespace Alltvex\ScoutOpenSearch\OpenSearch\Config;
 
 /**
  * @method static array hosts()
  * @method static user()
  * @method static password()
- * @method static elasticCloudId()
+ * @method static openCloudId()
  * @method static apiKey()
  */
 class Config
@@ -36,6 +36,6 @@ class Config
      */
     public function parse(): Storage
     {
-        return Storage::load('elasticsearch');
+        return Storage::load('opensearch');
     }
 }

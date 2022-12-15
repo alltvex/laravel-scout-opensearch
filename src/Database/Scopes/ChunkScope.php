@@ -1,6 +1,6 @@
 <?php
 
-namespace Matchish\ScoutElasticSearch\Database\Scopes;
+namespace Alltvex\ScoutOpenSearch\Database\Scopes;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -12,6 +12,7 @@ class ChunkScope implements Scope
      * @var mixed
      */
     private $start;
+
     /**
      * @var mixed
      */

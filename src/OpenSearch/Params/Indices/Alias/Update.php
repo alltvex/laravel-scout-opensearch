@@ -1,6 +1,6 @@
 <?php
 
-namespace Matchish\ScoutElasticSearch\ElasticSearch\Params\Indices\Alias;
+namespace Alltvex\ScoutOpenSearch\OpenSearch\Params\Indices\Alias;
 
 /**
  * @internal

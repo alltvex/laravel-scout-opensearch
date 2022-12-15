@@ -2,25 +2,25 @@
 
 declare(strict_types=1);
 
-namespace Matchish\ScoutElasticSearch\Console\Commands;
+namespace Alltvex\ScoutOpenSearch\Console\Commands;
 
+use Alltvex\ScoutOpenSearch\Searchable\SearchableListFactory;
 use Illuminate\Console\Command;
-use Matchish\ScoutElasticSearch\Searchable\SearchableListFactory;
 
 final class FlushCommand extends Command
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected $signature = 'scout:flush {searchable?* : The name of the searchable}';
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected $description = 'Flush the index of the the given searchable';
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function handle(): void
     {

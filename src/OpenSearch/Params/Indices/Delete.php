@@ -1,11 +1,11 @@
 <?php
 
-namespace Matchish\ScoutElasticSearch\ElasticSearch\Params\Indices;
+namespace Alltvex\ScoutOpenSearch\OpenSearch\Params\Indices;
 
 /**
  * @internal
  */
-final class Refresh
+final class Delete
 {
     /**
      * @var string
@@ -13,7 +13,7 @@ final class Refresh
     private $index;
 
     /**
-     * Refresh constructor.
+     * Delete constructor.
      *
      * @param  string  $index
      */

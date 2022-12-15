@@ -1,6 +1,6 @@
 <?php
 
-namespace Matchish\ScoutElasticSearch\ElasticSearch\Params;
+namespace Alltvex\ScoutOpenSearch\OpenSearch\Params;
 
 /**
  * @internal
@@ -11,6 +11,7 @@ final class Search
      * @var string
      */
     private $index;
+
     /**
      * @var array
      */

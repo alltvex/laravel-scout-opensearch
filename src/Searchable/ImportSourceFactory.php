@@ -1,6 +1,6 @@
 <?php
 
-namespace Matchish\ScoutElasticSearch\Searchable;
+namespace Alltvex\ScoutOpenSearch\Searchable;
 
 interface ImportSourceFactory
 {

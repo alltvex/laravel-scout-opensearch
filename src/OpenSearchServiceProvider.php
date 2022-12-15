@@ -2,23 +2,23 @@
 
 declare(strict_types=1);
 
-namespace Matchish\ScoutElasticSearch;
+namespace Alltvex\ScoutOpenSearch;
 
-use Elastic\Elasticsearch\Client;
-use Elastic\Elasticsearch\ClientBuilder;
+use Alltvex\ScoutOpenSearch\OpenSearch\Config\Config;
+use Alltvex\ScoutOpenSearch\OpenSearch\EloquentHitsIteratorAggregate;
+use Alltvex\ScoutOpenSearch\OpenSearch\HitsIteratorAggregate;
 use Illuminate\Support\ServiceProvider;
-use Matchish\ScoutElasticSearch\ElasticSearch\Config\Config;
-use Matchish\ScoutElasticSearch\ElasticSearch\EloquentHitsIteratorAggregate;
-use Matchish\ScoutElasticSearch\ElasticSearch\HitsIteratorAggregate;
+use OpenSearch\Client;
+use OpenSearch\ClientBuilder;
 
-final class ElasticSearchServiceProvider extends ServiceProvider
+final class OpenSearchServiceProvider extends ServiceProvider
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function register(): void
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/elasticsearch.php', 'elasticsearch');
+        $this->mergeConfigFrom(__DIR__.'/../config/opensearch.php', 'opensearch');
 
         $this->app->bind(Client::class, function () {
             $clientBuilder = ClientBuilder::create()->setHosts(Config::hosts());
@@ -26,7 +26,7 @@ final class ElasticSearchServiceProvider extends ServiceProvider
                 $clientBuilder->setBasicAuthentication($user, Config::password());
             }
 
-            if ($cloudId = Config::elasticCloudId()) {
+            if ($cloudId = Config::openCloudId()) {
                 $clientBuilder->setElasticCloudId($cloudId)
                     ->setApiKey(Config::apiKey());
             }
@@ -41,17 +41,17 @@ final class ElasticSearchServiceProvider extends ServiceProvider
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function boot(): void
     {
         $this->publishes([
-            __DIR__.'/../config/elasticsearch.php' => config_path('elasticsearch.php'),
+            __DIR__.'/../config/opensearch.php' => config_path('opensearch.php'),
         ], 'config');
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function provides(): array
     {

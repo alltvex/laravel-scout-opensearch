@@ -1,12 +1,12 @@
 <?php
 
-namespace Matchish\ScoutElasticSearch\Jobs\Stages;
+namespace Alltvex\ScoutOpenSearch\Jobs\Stages;
 
-use Elastic\Elasticsearch\Client;
-use Elastic\Elasticsearch\Exception\ClientResponseException;
-use Matchish\ScoutElasticSearch\ElasticSearch\Params\Indices\Alias\Get as GetAliasParams;
-use Matchish\ScoutElasticSearch\ElasticSearch\Params\Indices\Delete as DeleteIndexParams;
-use Matchish\ScoutElasticSearch\Searchable\ImportSource;
+use Alltvex\ScoutOpenSearch\OpenSearch\Params\Indices\Alias\Get as GetAliasParams;
+use Alltvex\ScoutOpenSearch\OpenSearch\Params\Indices\Delete as DeleteIndexParams;
+use Alltvex\ScoutOpenSearch\Searchable\ImportSource;
+use OpenSearch\Client;
+use OpenSearch\Common\Exceptions\OpenSearchException;
 
 /**
  * @internal
@@ -26,20 +26,20 @@ final class CleanUp
         $this->source = $source;
     }
 
-    public function handle(Client $elasticsearch): void
+    public function handle(Client $opensearch): void
     {
         $source = $this->source;
         $params = GetAliasParams::anyIndex($source->searchableAs());
         try {
-            $response = $elasticsearch->indices()->getAlias($params->toArray())->asArray();
-        } catch (ClientResponseException $e) {
+            $response = $opensearch->indices()->getAlias($params->toArray());
+        } catch (OpenSearchException $e) {
             $response = [];
         }
         foreach ($response as $indexName => $data) {
             foreach ($data['aliases'] as $alias => $config) {
                 if (array_key_exists('is_write_index', $config) && $config['is_write_index']) {
                     $params = new DeleteIndexParams((string) $indexName);
-                    $elasticsearch->indices()->delete($params->toArray());
+                    $opensearch->indices()->delete($params->toArray());
                     continue 2;
                 }
             }

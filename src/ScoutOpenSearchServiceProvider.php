@@ -2,37 +2,37 @@
 
 declare(strict_types=1);
 
-namespace Matchish\ScoutElasticSearch;
+namespace Alltvex\ScoutOpenSearch;
 
-use Elastic\Elasticsearch\Client;
+use Alltvex\ScoutOpenSearch\Console\Commands\FlushCommand;
+use Alltvex\ScoutOpenSearch\Console\Commands\ImportCommand;
+use Alltvex\ScoutOpenSearch\Engines\OpenSearchEngine;
+use Alltvex\ScoutOpenSearch\Searchable\DefaultImportSourceFactory;
+use Alltvex\ScoutOpenSearch\Searchable\ImportSourceFactory;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Scout\EngineManager;
 use Laravel\Scout\ScoutServiceProvider;
-use Matchish\ScoutElasticSearch\Console\Commands\FlushCommand;
-use Matchish\ScoutElasticSearch\Console\Commands\ImportCommand;
-use Matchish\ScoutElasticSearch\Engines\ElasticSearchEngine;
-use Matchish\ScoutElasticSearch\Searchable\DefaultImportSourceFactory;
-use Matchish\ScoutElasticSearch\Searchable\ImportSourceFactory;
+use OpenSearch\Client;
 
-final class ScoutElasticSearchServiceProvider extends ServiceProvider
+final class ScoutOpenSearchServiceProvider extends ServiceProvider
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function boot(): void
     {
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'scout');
 
-        $this->app->make(EngineManager::class)->extend(ElasticSearchEngine::class, function () {
-            $elasticsearch = app(Client::class);
+        $this->app->make(EngineManager::class)->extend(OpenSearchEngine::class, function () {
+            $opensearch = app(Client::class);
 
-            return new ElasticSearchEngine($elasticsearch);
+            return new OpenSearchEngine($opensearch);
         });
         $this->registerCommands();
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function register(): void
     {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Matchish\ScoutElasticSearch\ElasticSearch;
+namespace Alltvex\ScoutOpenSearch\OpenSearch;
 
 use IteratorAggregate;
 use Laravel\Scout\Builder;
@@ -16,6 +16,7 @@ final class EloquentHitsIteratorAggregate implements IteratorAggregate
      * @var array
      */
     private $results;
+
     /**
      * @var callable|null
      */

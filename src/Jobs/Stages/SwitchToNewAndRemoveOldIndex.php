@@ -1,12 +1,12 @@
 <?php
 
-namespace Matchish\ScoutElasticSearch\Jobs\Stages;
+namespace Alltvex\ScoutOpenSearch\Jobs\Stages;
 
-use Elastic\Elasticsearch\Client;
-use Matchish\ScoutElasticSearch\ElasticSearch\Index;
-use Matchish\ScoutElasticSearch\ElasticSearch\Params\Indices\Alias\Get;
-use Matchish\ScoutElasticSearch\ElasticSearch\Params\Indices\Alias\Update;
-use Matchish\ScoutElasticSearch\Searchable\ImportSource;
+use Alltvex\ScoutOpenSearch\OpenSearch\Index;
+use Alltvex\ScoutOpenSearch\OpenSearch\Params\Indices\Alias\Get;
+use Alltvex\ScoutOpenSearch\OpenSearch\Params\Indices\Alias\Update;
+use Alltvex\ScoutOpenSearch\Searchable\ImportSource;
+use OpenSearch\Client;
 
 /**
  * @internal
@@ -17,6 +17,7 @@ final class SwitchToNewAndRemoveOldIndex
      * @var ImportSource
      */
     private $source;
+
     /**
      * @var Index
      */
@@ -32,11 +33,11 @@ final class SwitchToNewAndRemoveOldIndex
         $this->index = $index;
     }
 
-    public function handle(Client $elasticsearch): void
+    public function handle(Client $opensearch): void
     {
         $source = $this->source;
         $params = Get::anyIndex($source->searchableAs());
-        $response = $elasticsearch->indices()->getAlias($params->toArray())->asArray();
+        $response = $opensearch->indices()->getAlias($params->toArray());
 
         $params = new Update();
         foreach ($response as $indexName => $alias) {
@@ -46,7 +47,7 @@ final class SwitchToNewAndRemoveOldIndex
                 $params->add((string) $indexName, $source->searchableAs());
             }
         }
-        $elasticsearch->indices()->updateAliases($params->toArray());
+        $opensearch->indices()->updateAliases($params->toArray());
     }
 
     public function estimate(): int
