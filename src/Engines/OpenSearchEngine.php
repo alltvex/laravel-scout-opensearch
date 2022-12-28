@@ -67,7 +67,7 @@ final class OpenSearchEngine extends Engine
     public function flush($model)
     {
         $indexName = $model->searchableAs();
-        $exist = $this->opensearch->indices()->exists(['index' => $indexName])->asBool();
+        $exist = $this->opensearch->indices()->exists(['index' => $indexName]);
         if ($exist) {
             $body = (new Search())->addQuery(new MatchAllQuery())->toArray();
             $params = new SearchParams($indexName, $body);
