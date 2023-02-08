@@ -50,17 +50,25 @@ class Storage
     /**
      * @return ?string
      */
-    public function openCloudId(): ?string
+    public function accessKey(): ?string
     {
-        return $this->loadConfig('cloud_id');
+        return $this->loadConfig('access_key');
     }
 
     /**
      * @return ?string
      */
-    public function apiKey(): ?string
+    public function secret(): ?string
     {
-        return $this->loadConfig('api_key');
+        return $this->loadConfig('secret');
+    }
+
+    /**
+     * @return ?string
+     */
+    public function region(): ?string
+    {
+        return $this->loadConfig('region');
     }
 
     /**

@@ -13,7 +13,7 @@ use Illuminate\Support\LazyCollection;
 use Laravel\Scout\Builder;
 use Laravel\Scout\Builder as BaseBuilder;
 use Laravel\Scout\Engines\Engine;
-use OpenSearch\Exception\ServerResponseException;
+use OpenSearch\Common\Exceptions\ServerErrorResponseException;
 use OpenSearchDSL\Query\MatchAllQuery;
 use OpenSearchDSL\Search;
 
@@ -46,7 +46,7 @@ final class OpenSearchEngine extends Engine
         $params->index($models);
         $response = $this->opensearch->bulk($params->toArray());
         if (array_key_exists('errors', $response) && $response['errors']) {
-            $error = new ServerResponseException(json_encode($response, JSON_PRETTY_PRINT));
+            $error = new ServerErrorResponseException(json_encode($response, JSON_PRETTY_PRINT));
             throw new \Exception('Bulk update error', $error->getCode(), $error);
         }
     }

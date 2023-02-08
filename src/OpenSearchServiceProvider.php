@@ -26,9 +26,13 @@ final class OpenSearchServiceProvider extends ServiceProvider
                 $clientBuilder->setBasicAuthentication($user, Config::password());
             }
 
-            if ($cloudId = Config::openCloudId()) {
-                $clientBuilder->setElasticCloudId($cloudId)
-                    ->setApiKey(Config::apiKey());
+            if ($cloudId = Config::accessKey()) {
+                $clientBuilder
+                    ->setSigV4CredentialProvider([
+                        'key' => Config::accessKey(),
+                        'secret' => Config::secret(),
+                    ])
+                    ->setSigV4Region(Config::region());
             }
 
             return $clientBuilder->build();
