@@ -6,6 +6,7 @@ namespace Alltvex\ScoutOpenSearch\Console\Commands;
 
 use Alltvex\ScoutOpenSearch\Jobs\Import;
 use Alltvex\ScoutOpenSearch\Jobs\QueueableJob;
+use Alltvex\ScoutOpenSearch\OpenSearch\Config\Config;
 use Alltvex\ScoutOpenSearch\Searchable\ImportSource;
 use Alltvex\ScoutOpenSearch\Searchable\ImportSourceFactory;
 use Alltvex\ScoutOpenSearch\Searchable\SearchableListFactory;
@@ -49,9 +50,11 @@ final class ImportCommand extends Command
         $sourceFactory = app(ImportSourceFactory::class);
         $source = $sourceFactory::from($searchable);
         $job = new Import($source);
+        $job->timeout = Config::queueTimeout();
 
         if (config('scout.queue')) {
             $job = (new QueueableJob())->chain([$job]);
+            $job->timeout = Config::queueTimeout();
         }
 
         $bar = (new ProgressBarFactory($this->output))->create();

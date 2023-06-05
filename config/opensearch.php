@@ -7,6 +7,9 @@ return [
     'access_key' => env('OPENSEARCH_ACCESS_KEY'),
     'secret' => env('OPENSEARCH_SECRET'),
     'region' => env('OPENSEARCH_REGION'),
+    'queue' => [
+        'timeout' => env('SCOUT_QUEUE_TIMEOUT'),
+    ],
     'indices' => [
         'mappings' => [
             'default' => [
