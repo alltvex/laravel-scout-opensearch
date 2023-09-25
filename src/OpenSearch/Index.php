@@ -89,12 +89,12 @@ final class Index
     public static function fromSource(ImportSource $source): self
     {
         $name = $source->searchableAs().'_'.time();
-        $settingsConfigKey = "opensearch.indices.settings.{$source->searchableAs()}";
-        $mappingsConfigKey = "opensearch.indices.mappings.{$source->searchableAs()}";
+        $settingsKey = str_replace(config('scout.prefix'), '', $source->searchableAs());
+        $settingsConfigKey = "opensearch.indices.settings.$settingsKey";
+        $mappingsConfigKey = "opensearch.indices.mappings.$settingsKey";
         $defaultSettings = [
             'number_of_shards' => 1,
             'number_of_replicas' => 0,
-
         ];
         $settings = config($settingsConfigKey, config('opensearch.indices.settings.default', $defaultSettings));
         $mappings = config($mappingsConfigKey, config('opensearch.indices.mappings.default'));

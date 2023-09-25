@@ -1,11 +1,15 @@
 <?php
 
 return [
-    'host' => env('ELASTICSEARCH_HOST'),
-    'user' => env('ELASTICSEARCH_USER'),
-    'password' => env('ELASTICSEARCH_PASSWORD'),
-    'cloud_id' => env('ELASTICSEARCH_CLOUD_ID'),
-    'api_key' => env('ELASTICSEARCH_API_KEY'),
+    'host' => env('OPENSEARCH_HOST'),
+    'user' => env('OPENSEARCH_USER'),
+    'password' => env('OPENSEARCH_PASSWORD'),
+    'access_key' => env('OPENSEARCH_ACCESS_KEY'),
+    'secret' => env('OPENSEARCH_SECRET'),
+    'region' => env('OPENSEARCH_REGION'),
+    'queue' => [
+        'timeout' => env('SCOUT_QUEUE_TIMEOUT'),
+    ],
     'indices' => [
         'mappings' => [
             'default' => [
