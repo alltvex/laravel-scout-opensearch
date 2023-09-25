@@ -17,7 +17,9 @@ final class ImportCommand extends Command
     /**
      * @inheritdoc
      */
-    protected $signature = 'scout:import {searchable?* : The name of the searchable}';
+    protected $signature = 'scout:import
+                            {searchable?* : The name of the searchable}
+                            {--queue= : Whether the job should be queued}';
 
     /**
      * @inheritdoc
@@ -50,7 +52,7 @@ final class ImportCommand extends Command
         $source = $sourceFactory::from($searchable);
         $job = new Import($source);
 
-        if (config('scout.queue')) {
+        if ($this->shouldQueue()) {
             $job = (new QueueableJob())->chain([$job]);
         }
 
@@ -68,5 +70,10 @@ final class ImportCommand extends Command
             'searchable' => $searchable,
         ]);
         $this->output->success($doneMessage);
+    }
+
+    private function shouldQueue()
+    {
+        return filter_var($this->option('queue') ?: config('scout.queue'), FILTER_VALIDATE_BOOLEAN);
     }
 }
