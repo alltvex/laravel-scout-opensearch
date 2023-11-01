@@ -2,6 +2,8 @@
 
 namespace Alltvex\ScoutOpenSearch\OpenSearch;
 
+use ArrayIterator;
+use Countable;
 use IteratorAggregate;
 use Laravel\Scout\Builder;
 use Laravel\Scout\Searchable;
@@ -10,7 +12,7 @@ use Traversable;
 /**
  * @internal
  */
-final class EloquentHitsIteratorAggregate implements IteratorAggregate
+final class EloquentHitsIteratorAggregate implements Countable, IteratorAggregate
 {
     /**
      * @var array
@@ -33,16 +35,33 @@ final class EloquentHitsIteratorAggregate implements IteratorAggregate
     }
 
     /**
-     * Retrieve an external iterator.
+     * Get the number of items matching the query.
      *
-     * @link https://php.net/manual/en/iteratoraggregate.getiterator.php
-     *
-     * @return Traversable An instance of an object implementing <b>Iterator</b> or
-     *                     <b>Traversable</b>
-     *
-     * @since 5.0.0
+     * @return int
      */
-    public function getIterator()
+    public function count()
+    {
+        return $this->results['hits']['total']['value'];
+    }
+
+    /**
+     * Get the last result’s sort values.
+     *
+     * @return array
+     */
+    public function lastSort()
+    {
+        $lastHit = end($results['hits']['hits']);
+
+        return $lastHit ? $lastHit['sort'] : [];
+    }
+
+    /**
+     * Get the result’s hits.
+     *
+     * @return array
+     */
+    public function getHits()
     {
         $hits = collect();
         if ($this->results['hits']['total']) {
@@ -71,6 +90,21 @@ final class EloquentHitsIteratorAggregate implements IteratorAggregate
             })->filter()->all();
         }
 
-        return new \ArrayIterator((array) $hits);
+        return $hits;
+    }
+
+    /**
+     * Retrieve an external iterator.
+     *
+     * @link https://php.net/manual/en/iteratoraggregate.getiterator.php
+     *
+     * @return Traversable An instance of an object implementing <b>Iterator</b> or
+     *                     <b>Traversable</b>
+     *
+     * @since 5.0.0
+     */
+    public function getIterator()
+    {
+        return new ArrayIterator((array) $this->getHits());
     }
 }

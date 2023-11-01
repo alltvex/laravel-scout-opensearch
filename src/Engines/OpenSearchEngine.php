@@ -116,7 +116,7 @@ final class OpenSearchEngine extends Engine
             ]
         );
 
-        return new Collection($hits);
+        return $hits;
     }
 
     /**
