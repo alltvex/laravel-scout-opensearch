@@ -8,6 +8,8 @@ use Alltvex\ScoutOpenSearch\OpenSearch\Params\Indices\Create;
 use Alltvex\ScoutOpenSearch\OpenSearch\WriteAlias;
 use Alltvex\ScoutOpenSearch\Searchable\ImportSource;
 use OpenSearch\Client;
+use OpenSearch\Common\Exceptions\OpenSearchException;
+use OpenSearch\Common\Exceptions\BadRequest400Exception;
 
 /**
  * @internal
@@ -44,7 +46,18 @@ final class CreateWriteIndex
             $this->index->config()
         );
 
-        $opensearch->indices()->create($params->toArray());
+        try {
+            $opensearch->indices()->create($params->toArray());
+        } catch (OpenSearchException $e) {
+            if (! ($e instanceof BadRequest400Exception)) {
+                throw $e;
+            }
+
+            $indices = implode(', ', array_keys($params->toArray()['body']['aliases']));
+
+            $opensearch->indices()->delete(['index' => $indices]);
+            $opensearch->indices()->create($params->toArray());
+        }
     }
 
     public function title(): string
