@@ -51,7 +51,7 @@ final class EloquentHitsIteratorAggregate implements Countable, IteratorAggregat
      */
     public function getLastSort()
     {
-        $lastHit = end($results['hits']['hits']);
+        $lastHit = end($this->results['hits']['hits']);
 
         return $lastHit ? $lastHit['sort'] : [];
     }
