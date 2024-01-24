@@ -77,6 +77,10 @@ final class ImportCommand extends Command
 
     private function shouldQueue()
     {
-        return filter_var($this->option('queue') ?: config('scout.queue'), FILTER_VALIDATE_BOOLEAN);
+        $enabled = config('scout.queue');
+
+        $enabled = is_bool($enabled) ? false : (is_array($enabled) && !empty($enabled) && $enabled['enable'] ?? false);
+
+        return filter_var($this->option('queue') ?: $enabled, FILTER_VALIDATE_BOOLEAN);
     }
 }
