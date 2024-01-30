@@ -39,7 +39,7 @@ final class EloquentHitsIteratorAggregate implements Countable, IteratorAggregat
      *
      * @return int
      */
-    public function count()
+    public function count(): int
     {
         return $this->results['hits']['total']['value'];
     }
@@ -49,7 +49,7 @@ final class EloquentHitsIteratorAggregate implements Countable, IteratorAggregat
      *
      * @return array
      */
-    public function getLastSort()
+    public function getLastSort(): array
     {
         $lastHit = end($this->results['hits']['hits']);
 
@@ -61,7 +61,7 @@ final class EloquentHitsIteratorAggregate implements Countable, IteratorAggregat
      *
      * @return array
      */
-    public function getHits()
+    public function getHits(): array
     {
         $hits = collect();
         if ($this->results['hits']['total']) {
@@ -103,7 +103,7 @@ final class EloquentHitsIteratorAggregate implements Countable, IteratorAggregat
      *
      * @since 5.0.0
      */
-    public function getIterator()
+    public function getIterator(): Traversable
     {
         return new ArrayIterator((array) $this->getHits());
     }

@@ -2,15 +2,17 @@
 
 namespace Alltvex\ScoutOpenSearch\OpenSearch;
 
+use Traversable;
+
 interface HitsIteratorAggregate extends \Countable, \IteratorAggregate
 {
     public function __construct(array $results, callable $callback = null);
 
-    public function count();
+    public function count(): int;
 
-    public function getLastSort();
+    public function getLastSort(): array;
 
-    public function getHits();
+    public function getHits(): array;
 
-    public function getIterator();
+    public function getIterator(): Traversable;
 }
