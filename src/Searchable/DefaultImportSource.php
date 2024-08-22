@@ -97,6 +97,6 @@ final class DefaultImportSource implements ImportSource
         /** @var EloquentCollection $models */
         $models = $this->newQuery()->get();
 
-        return $models;
+        return $models->first()->makeSearchableUsing($models);
     }
 }
